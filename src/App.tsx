@@ -3,7 +3,6 @@ import BirthDetailsForm from './components/BirthDetailsForm'
 import VedicChart from './components/VedicChart'
 import QuestionInput from './components/QuestionInput'
 import AnswerDisplay from './components/AnswerDisplay'
-import { supabase } from './lib/supabase'
 import { generateAIResponse, generateMockChartData } from './services/mockAI'
 import type { BirthChart, ChartData, Question, Language } from './types/database'
 
@@ -29,21 +28,19 @@ export default function App() {
       const mockChart = generateMockChartData()
       setChartData(mockChart)
 
-      const { data: chart, error } = await supabase
-        .from('birth_charts')
-        .insert({
-          name: data.name,
-          birth_date: data.birth_date,
-          birth_time: data.birth_time,
-          birth_place: data.birth_place,
-          chart_data: mockChart,
-          language_preference: data.language_preference,
-        })
-        .select()
-        .single()
+      const newChart: BirthChart = {
+        id: crypto.randomUUID(),
+        name: data.name,
+        birth_date: data.birth_date,
+        birth_time: data.birth_time,
+        birth_place: data.birth_place,
+        chart_data: mockChart,
+        language_preference: data.language_preference,
+        created_at: new Date().toISOString(),
+      }
 
-      if (error) throw error
-      setBirthChart(chart)
+      localStorage.setItem('birthChart', JSON.stringify(newChart))
+      setBirthChart(newChart)
     } catch (error) {
       console.error('Error creating birth chart:', error)
     } finally {
@@ -59,19 +56,18 @@ export default function App() {
     try {
       const answer = await generateAIResponse(chartData, questionText, language)
 
-      const { data: question, error } = await supabase
-        .from('questions')
-        .insert({
-          chart_id: birthChart.id,
-          question: questionText,
-          answer,
-          language,
-        })
-        .select()
-        .single()
+      const newQuestion: Question = {
+        id: crypto.randomUUID(),
+        chart_id: birthChart.id,
+        question: questionText,
+        answer,
+        language,
+        created_at: new Date().toISOString(),
+      }
 
-      if (error) throw error
-      setQuestions(prev => [question, ...prev])
+      const updatedQuestions = [newQuestion, ...questions]
+      setQuestions(updatedQuestions)
+      localStorage.setItem('questions', JSON.stringify(updatedQuestions))
     } catch (error) {
       console.error('Error submitting question:', error)
     } finally {
@@ -84,6 +80,8 @@ export default function App() {
   }
 
   const handleReset = () => {
+    localStorage.removeItem('birthChart')
+    localStorage.removeItem('questions')
     setBirthChart(null)
     setChartData(null)
     setQuestions([])
