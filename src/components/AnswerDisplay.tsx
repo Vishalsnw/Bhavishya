@@ -8,37 +8,37 @@ export default function AnswerDisplay({ question }: AnswerDisplayProps) {
   if (!question.answer) return null
 
   return (
-    <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-xl p-6 animate-fade-in border-2 border-green-200">
+    <div className="card animate-fade-in border-l-4 border-l-gold-400">
       <div className="mb-4">
         <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+          <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-celestial-400 to-celestial-300 flex items-center justify-center text-white font-bold text-sm shadow-lg">
             Q
           </div>
-          <div className="flex-1">
-            <p className="text-gray-800 font-medium leading-relaxed">
+          <div className="flex-1 pt-1">
+            <p className="text-zinc-200 font-medium leading-relaxed">
               {question.question}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="h-px bg-gradient-to-r from-green-200 via-green-300 to-green-200 my-4"></div>
+      <div className="h-px bg-gradient-to-r from-gold-400/40 via-gold-400/20 to-transparent my-5"></div>
 
       <div>
         <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+          <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-gold-400 to-gold-500 flex items-center justify-center text-zinc-900 font-bold text-sm shadow-lg">
             A
           </div>
-          <div className="flex-1">
-            <p className="text-gray-900 leading-relaxed whitespace-pre-line">
+          <div className="flex-1 pt-1">
+            <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
               {question.answer}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-green-200 text-right">
-        <span className="text-xs text-gray-500">
+      <div className="mt-5 pt-4 border-t border-zinc-800 flex justify-end">
+        <span className="text-xs text-zinc-600">
           {new Date(question.created_at).toLocaleString(
             question.language === 'hindi' ? 'hi-IN' : 'en-IN'
           )}

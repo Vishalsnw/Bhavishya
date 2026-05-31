@@ -18,6 +18,7 @@ const translations = {
       'मेरी शादी कब होगी?',
       'मेरा स्वास्थ्य कैसा रहेगा?',
     ],
+    suggestionsLabel: 'सुझाव:',
   },
   english: {
     placeholder: 'Ask your question... (e.g., When will I get a job?)',
@@ -29,6 +30,7 @@ const translations = {
       'When will I get married?',
       'How will be my health?',
     ],
+    suggestionsLabel: 'Suggestions:',
   },
   hinglish: {
     placeholder: 'Apna sawal puchein... (jaise: Mujhe naukri kab milegi?)',
@@ -40,6 +42,7 @@ const translations = {
       'Meri shadi kab hogi?',
       'Mera swasthya kaisa rahega?',
     ],
+    suggestionsLabel: 'Suggestions:',
   },
 }
 
@@ -60,7 +63,7 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in">
+    <div className="card card-elevated animate-fade-in">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
           <textarea
@@ -69,37 +72,35 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
             placeholder={t.placeholder}
             rows={3}
             disabled={isLoading}
-            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none resize-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
+            className="resize-none"
           />
         </div>
 
         <button
           type="submit"
           disabled={!question.trim() || isLoading}
-          className="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:shadow-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="btn-primary w-full"
         >
           {isLoading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <span className="flex items-center justify-center gap-3">
+              <span className="w-5 h-5 border-2 border-t-transparent border-current rounded-full animate-spin"></span>
               {t.loading}
-            </>
+            </span>
           ) : (
             t.submit
           )}
         </button>
       </form>
 
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <p className="text-sm text-gray-600 mb-2">
-          {language === 'hindi' ? 'सुझाव:' : language === 'english' ? 'Suggestions:' : 'Suggestions:'}
-        </p>
+      <div className="mt-5 pt-5 border-t border-zinc-800">
+        <p className="text-sm text-zinc-500 mb-3">{t.suggestionsLabel}</p>
         <div className="flex flex-wrap gap-2">
           {t.suggestions.map((suggestion, index) => (
             <button
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
               disabled={isLoading}
-              className="px-3 py-1.5 bg-gray-100 hover:bg-blue-50 hover:text-blue-700 text-gray-700 text-sm rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-sm rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-gold-300 hover:border-gold-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {suggestion}
             </button>

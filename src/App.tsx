@@ -89,13 +89,17 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative w-24 h-24 mx-auto mb-6">
-            <div className="absolute inset-0 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-            <div className="absolute inset-3 border-4 border-blue-300 border-b-transparent rounded-full animate-spin" style={{ animationDirection: 'reverse' }}></div>
+      <div className="min-h-screen flex items-center justify-center celestial-bg">
+        <div className="text-center px-4">
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            <div className="absolute inset-0 rounded-full border-4 border-gold-400/30 animate-pulse"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-gold-400/50 animate-spin" style={{ animationDuration: '3s' }}></div>
+            <div className="absolute inset-4 rounded-full border-4 border-t-gold-400 border-r-transparent border-b-transparent border-l-transparent animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-5xl animate-float">☉</span>
+            </div>
           </div>
-          <p className="text-white text-xl font-semibold">
+          <p className="text-gold-300 font-semibold text-lg tracking-wide">
             {language === 'hindi' ? 'कुंडली बन रही है...' : language === 'english' ? 'Generating your Kundali...' : 'Aapki Kundali ban rahi hai...'}
           </p>
         </div>
@@ -105,7 +109,7 @@ export default function App() {
 
   if (!birthChart || !chartData) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 celestial-bg">
         <BirthDetailsForm
           onSubmit={handleBirthDetailsSubmit}
           language={language}
@@ -121,42 +125,43 @@ export default function App() {
       welcome: 'नमस्ते',
       askQuestion: 'अपना सवाल पूछें',
       previousQuestions: 'पिछले सवाल',
-      newChart: 'नया चार्ट बनाएं',
+      newChart: 'नया चार्ट',
     },
     english: {
       title: 'Your Birth Chart',
       welcome: 'Hello',
       askQuestion: 'Ask Your Question',
       previousQuestions: 'Previous Questions',
-      newChart: 'Create New Chart',
+      newChart: 'New Chart',
     },
     hinglish: {
       title: 'Aapki Janam Kundali',
       welcome: 'Namaste',
       askQuestion: 'Apna Sawal Poochein',
       previousQuestions: 'Pichle Sawal',
-      newChart: 'Naya Chart Banayein',
+      newChart: 'Naya Chart',
     },
   }
 
   const t = translations[language]
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-6 lg:p-8 celestial-bg">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in">
-          <div className="flex items-center justify-between mb-6">
+        {/* Header Card */}
+        <div className="card animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{t.title}</h1>
-              <p className="text-gray-600 mt-1">
-                {t.welcome}, {birthChart.name}
+              <h1 className="mb-2">{t.title}</h1>
+              <p className="text-gold-200 text-lg">
+                {t.welcome}, <span className="font-semibold">{birthChart.name}</span>
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value as Language)}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2.5 text-sm"
               >
                 <option value="hindi">हिंदी</option>
                 <option value="english">English</option>
@@ -164,7 +169,7 @@ export default function App() {
               </select>
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all"
+                className="btn-secondary text-sm"
               >
                 {t.newChart}
               </button>
@@ -174,9 +179,10 @@ export default function App() {
           <VedicChart chartData={chartData} language={language} />
         </div>
 
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-4">{t.askQuestion}</h2>
+          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <h2 className="mb-4 text-gold-300">{t.askQuestion}</h2>
             <QuestionInput
               onSubmit={handleQuestionSubmit}
               isLoading={isSubmittingQuestion}
@@ -184,10 +190,10 @@ export default function App() {
             />
           </div>
 
-          <div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {questions.length > 0 && (
               <>
-                <h2 className="text-2xl font-bold text-white mb-4">{t.previousQuestions}</h2>
+                <h2 className="mb-4 text-gold-300">{t.previousQuestions}</h2>
                 <div className="space-y-4">
                   {questions.map((q) => (
                     <AnswerDisplay key={q.id} question={q} />

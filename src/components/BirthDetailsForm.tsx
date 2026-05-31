@@ -15,6 +15,7 @@ interface BirthDetailsFormProps {
 const translations = {
   hindi: {
     title: 'अपनी जन्म कुंडली के लिए विवरण भरें',
+    subtitle: 'ग्रहों की चाल से जानें अपना भविष्य',
     nameLabel: 'आपका नाम',
     namePlaceholder: 'अपना नाम लिखें',
     dateLabel: 'जन्म तिथि',
@@ -26,6 +27,7 @@ const translations = {
   },
   english: {
     title: 'Fill Your Birth Details for Kundali',
+    subtitle: 'Discover your destiny through planetary positions',
     nameLabel: 'Your Name',
     namePlaceholder: 'Enter your name',
     dateLabel: 'Birth Date',
@@ -37,6 +39,7 @@ const translations = {
   },
   hinglish: {
     title: 'Birth Details Bharein - Kundali ke liye',
+    subtitle: 'Grahon ki chaal se jaanein apna bhavishya',
     nameLabel: 'Aapka Naam',
     namePlaceholder: 'Naam likhein',
     dateLabel: 'Birth Date',
@@ -65,13 +68,25 @@ export default function BirthDetailsForm({ onSubmit, language, onLanguageChange 
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8 animate-fade-in">
-      <div className="bg-white rounded-2xl shadow-2xl p-8">
-        <div className="mb-6 flex justify-end">
+    <div className="w-full max-w-xl mx-auto animate-fade-in">
+      <div className="card">
+        {/* Header with celestial icons */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center gap-4 mb-4 text-3xl text-gold-400">
+            <span className="animate-float" style={{ animationDelay: '0s' }}>☽</span>
+            <span className="animate-float" style={{ animationDelay: '0.5s' }}>☉</span>
+            <span className="animate-float" style={{ animationDelay: '1s' }}>♃</span>
+          </div>
+          <h2 className="mb-2">{t.title}</h2>
+          <p className="text-zinc-400">{t.subtitle}</p>
+        </div>
+
+        {/* Language selector */}
+        <div className="flex justify-end mb-6">
           <select
             value={language}
             onChange={(e) => onLanguageChange(e.target.value as Language)}
-            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-auto min-w-[140px] text-sm"
           >
             <option value="hindi">हिंदी</option>
             <option value="english">English</option>
@@ -79,77 +94,60 @@ export default function BirthDetailsForm({ onSubmit, language, onLanguageChange 
           </select>
         </div>
 
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-          {t.title}
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              {t.nameLabel}
-            </label>
+            <label htmlFor="name">{t.nameLabel}</label>
             <input
               type="text"
               id="name"
               name="name"
               required
               placeholder={t.namePlaceholder}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              autoComplete="name"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700 mb-2">
-                {t.dateLabel}
-              </label>
+              <label htmlFor="birth_date">{t.dateLabel}</label>
               <input
                 type="date"
                 id="birth_date"
                 name="birth_date"
                 required
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label htmlFor="birth_time" className="block text-sm font-medium text-gray-700 mb-2">
-                {t.timeLabel}
-              </label>
+              <label htmlFor="birth_time">{t.timeLabel}</label>
               <input
                 type="time"
                 id="birth_time"
                 name="birth_time"
                 required
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="birth_place" className="block text-sm font-medium text-gray-700 mb-2">
-              {t.placeLabel}
-            </label>
+            <label htmlFor="birth_place">{t.placeLabel}</label>
             <input
               type="text"
               id="birth_place"
               name="birth_place"
               required
               placeholder={t.placePlaceholder}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              autoComplete="off"
             />
           </div>
 
           <div>
-            <label htmlFor="language_preference" className="block text-sm font-medium text-gray-700 mb-2">
-              {t.languageLabel}
-            </label>
+            <label htmlFor="language_preference">{t.languageLabel}</label>
             <select
               id="language_preference"
               name="language_preference"
               value={language}
               onChange={(e) => onLanguageChange(e.target.value as Language)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             >
               <option value="hindi">हिंदी (Hindi)</option>
               <option value="english">English</option>
@@ -157,12 +155,11 @@ export default function BirthDetailsForm({ onSubmit, language, onLanguageChange 
             </select>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
-          >
-            {t.submit}
-          </button>
+          <div className="pt-4">
+            <button type="submit" className="btn-primary w-full">
+              {t.submit}
+            </button>
+          </div>
         </form>
       </div>
     </div>
