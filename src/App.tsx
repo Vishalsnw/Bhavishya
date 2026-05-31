@@ -24,7 +24,6 @@ export default function App() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false)
 
-  // Load from localStorage on mount
   useEffect(() => {
     const savedChart = localStorage.getItem('birthChart')
     const savedQuestions = localStorage.getItem('questions')
@@ -58,7 +57,6 @@ export default function App() {
     setLanguage(data.language_preference)
     setCurrentStep(0)
 
-    // Simulate step-by-step loading
     const stepInterval = setInterval(() => {
       setCurrentStep((prev) => {
         if (prev >= loadingSteps.length - 1) {
@@ -135,47 +133,40 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center celestial-bg px-4">
+      <div className="min-h-screen flex items-center justify-center px-4 py-8">
         <div className="text-center max-w-md w-full">
-          {/* Animated celestial symbol */}
-          <div className="relative w-28 h-28 mx-auto mb-8">
-            <div className="absolute inset-0 rounded-full border-2 border-gold-400/20 animate-pulse"></div>
-            <div className="absolute inset-3 rounded-full border-2 border-gold-400/40 animate-spin" style={{ animationDuration: '4s' }}></div>
-            <div className="absolute inset-6 rounded-full border-2 border-t-gold-400 border-r-transparent border-b-transparent border-l-transparent animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
+          <div className="relative w-36 h-36 mx-auto mb-10">
+            <div className="absolute inset-0 rounded-full border-3 border-gold-400/20 animate-pulse"></div>
+            <div className="absolute inset-3 rounded-full border-3 border-gold-400/40 animate-spin" style={{ animationDuration: '4s' }}></div>
+            <div className="absolute inset-6 rounded-full border-3 border-t-gold-400 border-r-transparent border-b-transparent border-l-transparent animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-5xl text-gold-400 animate-float">☉</span>
+              <span className="text-7xl text-gold-400 animate-float">☉</span>
             </div>
           </div>
 
-          {/* Title */}
-          <h2 className="text-xl font-semibold text-gold-300 mb-6">
+          <h2 className="text-3xl font-bold text-gold-300 mb-8">
             {language === 'hindi' ? 'कुंडली बन रही है...' : language === 'english' ? 'Generating Your Kundali...' : 'Aapki Kundali Ban Rahi Hai...'}
           </h2>
 
-          {/* Progress steps */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             {loadingSteps.map((step, index) => (
               <div
                 key={step.key}
-                className={`flex items-center gap-3 transition-all duration-300 ${
+                className={`flex items-center gap-4 transition-all duration-300 px-4 ${
                   index <= currentStep ? 'opacity-100' : 'opacity-30'
                 }`}
               >
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-lg ${
                   index < currentStep
                     ? 'bg-gold-400 text-zinc-900'
                     : index === currentStep
-                    ? 'border-2 border-gold-400 animate-pulse'
-                    : 'border border-zinc-700'
+                    ? 'border-3 border-gold-400 animate-pulse'
+                    : 'border-2 border-zinc-700'
                 }`}>
-                  {index < currentStep && (
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  )}
+                  {index < currentStep && '✓'}
                 </div>
-                <span className={`text-sm ${
-                  index === currentStep ? 'text-gold-300 font-medium' : 'text-zinc-400'
+                <span className={`text-base ${
+                  index === currentStep ? 'text-gold-300 font-semibold' : 'text-zinc-400'
                 }`}>
                   {step.text[language]}
                 </span>
@@ -183,8 +174,8 @@ export default function App() {
             ))}
           </div>
 
-          <p className="text-xs text-zinc-500 mt-8">
-            {language === 'hindi' ? 'कृपया इस विंडो को बंद न करें या रिफ्रेश न करें' : 'Please do not close or refresh this window'}
+          <p className="text-sm text-zinc-500 mt-10">
+            {language === 'hindi' ? 'कृपया इस विंडो को बंद न करें' : 'Please do not close this window'}
           </p>
         </div>
       </div>
@@ -193,33 +184,13 @@ export default function App() {
 
   if (!birthChart || !chartData) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 celestial-bg">
-        <div className="w-full max-w-xl">
+      <div className="min-h-screen flex items-center justify-center p-4 py-8">
+        <div className="w-full max-w-2xl">
           <BirthDetailsForm
             onSubmit={handleBirthDetailsSubmit}
             language={language}
             onLanguageChange={handleLanguageChange}
           />
-
-          {/* Trust indicators */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl mb-1">🕉️</div>
-              <div className="text-xs text-zinc-500">100% Vedic</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl mb-1">🔒</div>
-              <div className="text-xs text-zinc-500">Secure & Private</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl mb-1">⚡</div>
-              <div className="text-xs text-zinc-500">Instant Results</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl mb-1">✨</div>
-              <div className="text-xs text-zinc-500">Accurate</div>
-            </div>
-          </div>
         </div>
       </div>
     )
@@ -252,22 +223,21 @@ export default function App() {
   const t = translations[language]
 
   return (
-    <div className="min-h-screen p-4 md:p-6 lg:p-8 celestial-bg">
+    <div className="min-h-screen p-4 md:p-6 lg:p-8 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header Card */}
         <div className="card animate-fade-in">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
               <h1 className="mb-2">{t.title}</h1>
-              <p className="text-gold-200 text-lg">
-                {t.welcome}, <span className="font-semibold">{birthChart.name}</span>
+              <p className="text-gold-200 text-xl">
+                {t.welcome}, <span className="font-bold">{birthChart.name}</span>
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value as Language)}
-                className="px-4 py-2.5 text-sm"
+                className="min-w-[140px]"
               >
                 <option value="hindi">हिंदी</option>
                 <option value="english">English</option>
@@ -275,7 +245,7 @@ export default function App() {
               </select>
               <button
                 onClick={handleReset}
-                className="btn-secondary text-sm"
+                className="btn-secondary"
               >
                 {t.newChart}
               </button>
@@ -285,10 +255,9 @@ export default function App() {
           <VedicChart chartData={chartData} language={language} />
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <h2 className="mb-4 text-gold-300">{t.askQuestion}</h2>
+            <h2 className="mb-6 text-gold-300">{t.askQuestion}</h2>
             <QuestionInput
               onSubmit={handleQuestionSubmit}
               isLoading={isSubmittingQuestion}
@@ -299,7 +268,7 @@ export default function App() {
           <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {questions.length > 0 && (
               <>
-                <h2 className="mb-4 text-gold-300">{t.previousQuestions}</h2>
+                <h2 className="mb-6 text-gold-300">{t.previousQuestions}</h2>
                 <div className="space-y-4">
                   {questions.map((q) => (
                     <AnswerDisplay key={q.id} question={q} />

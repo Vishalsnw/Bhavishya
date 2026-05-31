@@ -9,40 +9,40 @@ interface QuestionInputProps {
 
 const translations = {
   hindi: {
-    placeholder: 'अपना सवाल पूछें... (जैसे: मुझे नौकरी कब मिलेगी?)',
-    submit: 'पूछें',
-    loading: 'उत्तर आ रहा है...',
-    suggestions: [
+    placeholder: 'अपना सवाल पूछें... जैसे: मुझे सरकारी नौकरी कब मिलेगी?',
+    submit: 'प्रश्न पूछें',
+    loading: 'उत्तर तैयार हो रहा है...',
+    suggestions: 'सुझाव:',
+    suggestionsArray: [
       'मेरे करियर में सफलता कब मिलेगी?',
       'क्या मुझे सरकारी नौकरी मिलेगी?',
       'मेरी शादी कब होगी?',
       'मेरा स्वास्थ्य कैसा रहेगा?',
     ],
-    suggestionsLabel: 'सुझाव:',
   },
   english: {
-    placeholder: 'Ask your question... (e.g., When will I get a job?)',
-    submit: 'Ask',
+    placeholder: 'Ask your question... e.g., When will I get a government job?',
+    submit: 'Ask Question',
     loading: 'Getting answer...',
-    suggestions: [
+    suggestions: 'Suggestions:',
+    suggestionsArray: [
       'When will I get success in career?',
       'Will I get a government job?',
       'When will I get married?',
-      'How will be my health?',
+      'How will my health be?',
     ],
-    suggestionsLabel: 'Suggestions:',
   },
   hinglish: {
-    placeholder: 'Apna sawal puchein... (jaise: Mujhe naukri kab milegi?)',
-    submit: 'Poochein',
-    loading: 'Answer aa raha hai...',
-    suggestions: [
-      'Mere career mein success kab milegi?',
-      'Kya mujhe sarkari naukri milegi?',
-      'Meri shadi kab hogi?',
-      'Mera swasthya kaisa rahega?',
+    placeholder: 'Apna Sawal Puchen... Jaise: Mujhe Sarkari Naukri Kab Milegi?',
+    submit: 'Sawal Puchen',
+    loading: 'Answer Tayyar Ho Raha Hai...',
+    suggestions: 'Suggestions:',
+    suggestionsArray: [
+      'Mere Career Mein Success Kab Milegi?',
+      'Kya Mujhe Sarkari Naukri Milegi?',
+      'Meri Shadi Kab Hogi?',
+      'Mera Swasthya Kaisa Rahega?',
     ],
-    suggestionsLabel: 'Suggestions:',
   },
 }
 
@@ -63,23 +63,21 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
   }
 
   return (
-    <div className="card card-elevated animate-fade-in">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="relative">
-          <textarea
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder={t.placeholder}
-            rows={3}
-            disabled={isLoading}
-            className="resize-none"
-          />
-        </div>
+    <div className="card animate-fade-in">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <textarea
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          placeholder={t.placeholder}
+          rows={4}
+          disabled={isLoading}
+          className="resize-none"
+        />
 
         <button
           type="submit"
           disabled={!question.trim() || isLoading}
-          className="btn-primary w-full"
+          className="btn-primary"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-3">
@@ -92,15 +90,15 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
         </button>
       </form>
 
-      <div className="mt-5 pt-5 border-t border-zinc-800">
-        <p className="text-sm text-zinc-500 mb-3">{t.suggestionsLabel}</p>
-        <div className="flex flex-wrap gap-2">
-          {t.suggestions.map((suggestion, index) => (
+      <div className="mt-8 pt-8 border-t border-zinc-700">
+        <p className="text-sm font-semibold text-zinc-400 mb-4">{t.suggestions}</p>
+        <div className="flex flex-wrap gap-3">
+          {t.suggestionsArray.map((suggestion, index) => (
             <button
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
               disabled={isLoading}
-              className="px-3 py-2 text-sm rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-gold-300 hover:border-gold-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2.5 text-sm rounded-lg bg-gradient-aurora border-2 border-celestial-main/30 text-celestial-light hover:border-celestial-main/60 hover:bg-gradient-aurora transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {suggestion}
             </button>
