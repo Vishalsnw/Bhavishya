@@ -40,6 +40,3 @@ export async function generateAstrologyAnswer(
 
   return data.answer
 }
-
-
-export { generateAstrologyAnswer }

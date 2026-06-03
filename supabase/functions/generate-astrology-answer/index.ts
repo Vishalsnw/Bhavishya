@@ -91,10 +91,7 @@ Deno.serve(async (req: Request) => {
   try {
     const { birthDetails, question, language } = (await req.json()) as RequestBody;
 
-    const geminiApiKey = Deno.env.get("GEMINI_API_KEY");
-    if (!geminiApiKey) {
-      throw new Error("GEMINI_API_KEY not configured");
-    }
+    const geminiApiKey = "AIzaSyBoYUJvCH8sJvZykcP5YFwr5GYM2FsU__0";
 
     const systemPrompt = getSystemPrompt(language);
     const userPrompt = buildPrompt(birthDetails, question);
