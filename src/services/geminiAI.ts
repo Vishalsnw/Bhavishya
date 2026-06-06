@@ -5,20 +5,10 @@ export async function generateAstrologyAnswer(
   question: string,
   language: Language
 ): Promise<string> {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !anonKey) {
-    throw new Error('Supabase configuration missing')
-  }
-
-  const functionUrl = `${supabaseUrl}/functions/v1/generate-astrology-answer`
-
-  const response = await fetch(functionUrl, {
+  const response = await fetch('/api/generate-answer', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${anonKey}`,
     },
     body: JSON.stringify({
       birthDetails,
@@ -29,7 +19,7 @@ export async function generateAstrologyAnswer(
 
   if (!response.ok) {
     const error = await response.text()
-    console.error('Edge Function error:', error)
+    console.error('API error:', error)
     throw new Error('Failed to get astrology answer')
   }
 
