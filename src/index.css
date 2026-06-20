@@ -211,7 +211,7 @@ select:focus {
   outline: none;
   border-color: var(--gold-300);
   background: linear-gradient(135deg, rgba(26, 26, 38, 0.95) 0%, rgba(37, 37, 67, 0.6) 100%);
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.25), inset 0 0 10px rgba(251, 191, 36, 0.1);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.25), inset 0 0 10px rgba(251, 191, 36, .1);
   transform: translateY(-2px);
 }
 
@@ -299,6 +299,12 @@ button {
   border-color: rgba(251, 191, 36, 0.2);
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(251, 191, 36, 0.1);
   transform: translateY(-4px);
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Trust badge */

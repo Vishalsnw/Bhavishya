@@ -150,7 +150,7 @@ export default function App() {
     <div className="min-h-screen p-4 md:p-6 lg:p-8 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header with birth details summary */}
-        <div className="card animate-fade-in">
+        <div className="card card-glass animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <p className="text-gold-200 text-xl">
