@@ -153,7 +153,7 @@ export default function App() {
         <div className="card card-glass animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <p className="text-gold-200 text-xl">
+              <p className="text-celestial-dark text-xl">
                 {t.welcome}, <span className="font-bold">{birthDetails.name}</span>
               </p>
             </div>
@@ -174,34 +174,34 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="text-center p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">{t.birthInfo}</div>
-              <div className="text-sm font-semibold text-gold-300">{birthDetails.name}</div>
+            <div className="summary-box">
+              <div className="summary-box-label">{t.birthInfo}</div>
+              <div className="summary-box-value">{birthDetails.name}</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">DOB</div>
-              <div className="text-sm font-semibold text-gold-300">{birthDetails.birth_date}</div>
+            <div className="summary-box">
+              <div className="summary-box-label">DOB</div>
+              <div className="summary-box-value">{birthDetails.birth_date}</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Time</div>
-              <div className="text-sm font-semibold text-gold-300">{birthDetails.birth_time}</div>
+            <div className="summary-box">
+              <div className="summary-box-label">Time</div>
+              <div className="summary-box-value">{birthDetails.birth_time}</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Place</div>
-              <div className="text-sm font-semibold text-gold-300">{birthDetails.birth_place}</div>
+            <div className="summary-box">
+              <div className="summary-box-label">Place</div>
+              <div className="summary-box-value">{birthDetails.birth_place}</div>
             </div>
           </div>
         </div>
 
         {/* Loading overlay */}
         {isSubmittingQuestion && (
-          <div className="card animate-fade-in border border-gold-400/30">
+          <div className="card animate-fade-in border border-celestial-main/30">
             <div className="text-center mb-6">
               <div className="relative w-24 h-24 mx-auto mb-6">
-                <div className="absolute inset-0 rounded-full border-3 border-gold-400/20 animate-pulse"></div>
-                <div className="absolute inset-2 rounded-full border-3 border-t-gold-400 border-r-transparent border-b-transparent border-l-transparent animate-spin" style={{ animationDuration: '2s' }}></div>
+                <div className="absolute inset-0 rounded-full border-3 border-celestial-main/20 animate-pulse"></div>
+                <div className="absolute inset-2 rounded-full border-3 border-t-celestial-main border-r-transparent border-b-transparent border-l-transparent animate-spin" style={{ animationDuration: '2s' }}></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-5xl text-gold-400 animate-float">&#9788;</span>
+                  <span className="text-5xl text-celestial-main animate-float">&#9788;</span>
                 </div>
               </div>
             </div>
@@ -211,20 +211,20 @@ export default function App() {
                 <div
                   key={index}
                   className={`flex items-center gap-4 transition-all duration-300 px-4 ${
-                    index <= currentStep ? 'opacity-100' : 'opacity-30'
+                    index <= currentStep ? 'opacity-100' : 'opacity-50'
                   }`}
                 >
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-sm ${
                     index < currentStep
-                      ? 'bg-gold-400 text-zinc-900'
+                      ? 'bg-celestial-main text-white'
                       : index === currentStep
-                      ? 'border-2 border-gold-400 animate-pulse'
-                      : 'border-2 border-zinc-700'
+                      ? 'border-2 border-celestial-main animate-pulse'
+                      : 'border-2 border-gray-300'
                   }`}>
                     {index < currentStep && '&#10003;'}
                   </div>
                   <span className={`text-sm ${
-                    index === currentStep ? 'text-gold-300 font-semibold' : 'text-zinc-400'
+                    index === currentStep ? 'text-celestial-dark font-semibold' : 'text-muted'
                   }`}>
                     {step}
                   </span>
@@ -236,14 +236,14 @@ export default function App() {
 
         {/* Error display */}
         {error && (
-          <div className="card animate-fade-in border border-red-500/30 bg-red-500/5">
-            <p className="text-red-400 text-center">{error}</p>
+          <div className="card animate-fade-in border border-red-500/30 bg-red-500/10">
+            <p className="text-red-600 text-center">{error}</p>
           </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <h2 className="mb-6 text-gold-300">{t.askQuestion}</h2>
+            <h2 className="mb-6 text-celestial-dark">{t.askQuestion}</h2>
             <QuestionInput
               onSubmit={handleQuestionSubmit}
               isLoading={isSubmittingQuestion}
@@ -254,7 +254,7 @@ export default function App() {
           <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {questions.length > 0 && (
               <>
-                <h2 className="mb-6 text-gold-300">{t.previousQuestions}</h2>
+                <h2 className="mb-6 text-celestial-dark">{t.previousQuestions}</h2>
                 <div className="space-y-4">
                   {questions.map((q) => (
                     <AnswerDisplay key={q.id} question={q} />
