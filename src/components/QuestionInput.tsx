@@ -1,72 +1,51 @@
-import { useState } from 'react'
-import type { Language } from '../types/database'
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { BirthDetails } from '../types/database';
 
 interface QuestionInputProps {
-  onSubmit: (question: string) => void
-  isLoading: boolean
-  language: Language
+  onSubmit: (question: string) => void;
+  isLoading: boolean;
+  birthDetails: BirthDetails;
 }
 
-const translations = {
-  hindi: {
-    placeholder: 'अपना सवाल पूछें... जैसे: मुझे सरकारी नौकरी कब मिलेगी?',
-    submit: 'प्रश्न पूछें',
-    loading: 'ग्रहों का विश्लेषण हो रहा है...',
-    suggestions: 'सुझाव:',
-    suggestionsArray: [
-      'मेरे करियर में सफलता कब मिलेगी?',
-      'क्या मुझे सरकारी नौकरी मिलेगी?',
-      'मेरी शादी कब होगी?',
-      'मेरा स्वास्थ्य कैसा रहेगा?',
-      'मुझे विदेश यात्रा का योग है?',
-      'मेरी आर्थिक स्थिति कब सुधरेगी?',
-    ],
-  },
-  english: {
-    placeholder: 'Ask your question... e.g., When will I get a government job?',
-    submit: 'Ask Question',
-    loading: 'Analyzing planetary positions...',
-    suggestions: 'Suggestions:',
-    suggestionsArray: [
-      'When will I get success in career?',
-      'Will I get a government job?',
-      'When will I get married?',
-      'How will my health be?',
-      'Will I travel abroad?',
-      'When will my financial situation improve?',
-    ],
-  },
-  hinglish: {
-    placeholder: 'Apna Sawal Puchen... Jaise: Mujhe Sarkari Naukri Kab Milegi?',
-    submit: 'Sawal Puchen',
-    loading: 'Grahon Ka Vishlesh Ho Raha Hai...',
-    suggestions: 'Suggestions:',
-    suggestionsArray: [
-      'Mere Career Mein Success Kab Milegi?',
-      'Kya Mujhe Sarkari Naukri Milegi?',
-      'Meri Shadi Kab Hogi?',
-      'Mera Swasthya Kaisa Rahega?',
-      'Kya Mujhe Videsh Yatra Ka Yog Hai?',
-      'Meri Arthik Sthiti Kab Sudhregi?',
-    ],
-  },
-}
+export default function QuestionInput({ onSubmit, isLoading, birthDetails }: QuestionInputProps) {
+  const [question, setQuestion] = useState('');
+  const { t } = useTranslation();
 
-export default function QuestionInput({ onSubmit, isLoading, language }: QuestionInputProps) {
-  const [question, setQuestion] = useState('')
-  const t = translations[language]
+  const getAge = (birthDate: string) => {
+    const today = new Date();
+    const [day, month, year] = birthDate.split('-').map(Number);
+    const birthDateObj = new Date(year, month - 1, day);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const m = today.getMonth() - birthDateObj.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDateObj.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const age = getAge(birthDetails.birth_date);
+
+  let suggestions: string[];
+  if (age < 30) {
+    suggestions = t('questionInput.suggestions_young', { returnObjects: true }) as string[];
+  } else if (age >= 30 && age <= 50) {
+    suggestions = t('questionInput.suggestions_mid', { returnObjects: true }) as string[];
+  } else {
+    suggestions = t('questionInput.suggestions_senior', { returnObjects: true }) as string[];
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (question.trim() && !isLoading) {
-      onSubmit(question.trim())
-      setQuestion('')
+      onSubmit(question.trim());
+      setQuestion('');
     }
-  }
+  };
 
   const handleSuggestionClick = (suggestion: string) => {
-    setQuestion(suggestion)
-  }
+    setQuestion(suggestion);
+  };
 
   return (
     <div className="card animate-fade-in">
@@ -74,7 +53,7 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
         <textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder={t.placeholder}
+          placeholder={t('questionInput.placeholder')}
           rows={4}
           disabled={isLoading}
           className="resize-none"
@@ -88,18 +67,18 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
           {isLoading ? (
             <span className="flex items-center justify-center gap-3">
               <span className="w-5 h-5 border-2 border-t-transparent border-current rounded-full animate-spin"></span>
-              {t.loading}
+              {t('questionInput.loading')}
             </span>
           ) : (
-            t.submit
+            t('questionInput.submit')
           )}
         </button>
       </form>
 
       <div className="mt-8 pt-8 border-t border-zinc-700">
-        <p className="text-sm font-semibold text-zinc-400 mb-4">{t.suggestions}</p>
+        <p className="text-sm font-semibold text-zinc-400 mb-4">{t('questionInput.suggestions')}</p>
         <div className="flex flex-wrap gap-3">
-          {t.suggestionsArray.map((suggestion, index) => (
+          {suggestions.map((suggestion, index) => (
             <button
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
@@ -112,5 +91,5 @@ export default function QuestionInput({ onSubmit, isLoading, language }: Questio
         </div>
       </div>
     </div>
-  )
+  );
 }

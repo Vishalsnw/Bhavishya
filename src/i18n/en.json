@@ -1,0 +1,73 @@
+{
+  "questionInput": {
+    "placeholder": "Ask your question... e.g., When will I get a government job?",
+    "submit": "Ask Question",
+    "loading": "Analyzing planetary positions...",
+    "suggestions": "Suggestions:",
+    "suggestions_young": [
+      "When will I get success in my career?",
+      "What field of study is best for me?",
+      "When will I get married?",
+      "Will I travel abroad for education?",
+      "How can I improve my financial situation?"
+    ],
+    "suggestions_mid": [
+      "How will my career progress in the next 5 years?",
+      "Will I face any major health issues?",
+      "What is the right time to invest in property?",
+      "How will my relationship with my spouse be?",
+      "When will my children get settled?"
+    ],
+    "suggestions_senior": [
+      "How will my health be in my old age?",
+      "Will I have a peaceful retired life?",
+      "Should I invest in the stock market after retirement?",
+      "When is a good time for spiritual travel?",
+      "How can I best support my children's families?"
+    ]
+  },
+  "loadingSteps": [
+    "Analyzing Birth Details",
+    "Calculating Vedic Chart",
+    "Analyzing Planetary Positions",
+    "Checking Numerology",
+    "Referencing Ancient Wisdom",
+    "Preparing Your Answer"
+  ],
+  "birthDetailsForm": {
+    "title": "Astrology Service",
+    "subtitle": "Get Answers Based on Vedic Astrology, Numerology & Ancient Wisdom",
+    "trustedBy": "Trusted by 500,000+ Users Worldwide",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Enter your name",
+    "dateLabel": "Birth Date",
+    "timeLabel": "Birth Time",
+    "placeLabel": "Birth Place",
+    "placePlaceholder": "City name",
+    "submit": "Ask Your Question",
+    "accurateDetails": "Enter accurate birth details for precise answers",
+    "trustItems": {
+      "vedic": "Vedic Jyotish",
+      "numerology": "Numerology",
+      "book": "Book of Dead",
+      "multi": "Multi-System"
+    }
+  },
+  "app": {
+    "welcome": "Hello",
+    "newSession": "New Session",
+    "birthInfo": "Birth Details",
+    "askQuestion": "Ask Your Question",
+    "previousQuestions": "Previous Answers"
+  },
+  "error": {
+    "fetchAnswer": "Error getting answer. Please try again."
+  },
+  "astrologicalFacts": [
+    "The word 'zodiac' comes from the Greek word meaning 'circle of animals.'",
+    "There are 12 zodiac signs, and each sign has its own strengths and weaknesses.",
+    "Astrology is one of the oldest sciences in the world, dating back to ancient Babylon.",
+    "The 12 houses of the zodiac represent different areas of life, from career to relationships.",
+    "Your rising sign, or ascendant, is the zodiac sign that was on the eastern horizon at the time of your birth."
+  ]
+}

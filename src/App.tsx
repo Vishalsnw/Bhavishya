@@ -1,181 +1,124 @@
-import { useState } from 'react'
-import BirthDetailsForm from './components/BirthDetailsForm'
-import QuestionInput from './components/QuestionInput'
-import AnswerDisplay from './components/AnswerDisplay'
-import { generateAstrologyAnswer } from './services/geminiAI'
-import type { BirthDetails, Question, Language } from './types/database'
-
-const loadingSteps = {
-  hindi: [
-    'जन्म विवरण विश्लेषण',
-    'वैदिक चार्ट की गणना',
-    'ग्रह स्थिति का विश्लेषण',
-    'अंक ज्योतिष की जांच',
-    'प्राचीन ज्ञान का संदर्भ',
-    'उत्तर तैयार किया जा रहा है',
-  ],
-  english: [
-    'Analyzing Birth Details',
-    'Calculating Vedic Chart',
-    'Analyzing Planetary Positions',
-    'Checking Numerology',
-    'Referencing Ancient Wisdom',
-    'Preparing Your Answer',
-  ],
-  hinglish: [
-    'Birth Details Analyze',
-    'Vedic Chart Calculate',
-    'Grah Sthiti Analyze',
-    'Numerology Check',
-    'Ancient Wisdom Reference',
-    'Answer Prepare Ho Raha Hai',
-  ],
-}
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import BirthDetailsForm from './components/BirthDetailsForm';
+import QuestionInput from './components/QuestionInput';
+import AnswerDisplay from './components/AnswerDisplay';
+import { generateAstrologyAnswer } from './services/geminiAI';
+import type { BirthDetails, Question, Language } from './types/database';
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>('hinglish')
-  const [birthDetails, setBirthDetails] = useState<BirthDetails | null>(null)
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [error, setError] = useState<string | null>(null)
+  const { t, i18n } = useTranslation();
+  const [birthDetails, setBirthDetails] = useState<BirthDetails | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [randomFact, setRandomFact] = useState<string>('');
 
-  const handleBirthDetailsSubmit = (data: {
-    name: string
-    birth_date: string
-    birth_time: string
-    birth_place: string
-    language_preference: Language
-  }) => {
-    setLanguage(data.language_preference)
-    setBirthDetails(data)
-  }
+  const handleBirthDetailsSubmit = (data: Omit<BirthDetails, 'language_preference'>) => {
+    setBirthDetails({
+      ...data,
+      language_preference: i18n.language as Language,
+    });
+  };
 
   const handleQuestionSubmit = async (questionText: string) => {
-    if (!birthDetails) return
+    if (!birthDetails) return;
 
-    setIsSubmittingQuestion(true)
-    setError(null)
-    setCurrentStep(0)
+    setIsSubmittingQuestion(true);
+    setError(null);
+    setCurrentStep(0);
 
-    const steps = loadingSteps[language]
+    const steps = t('loadingSteps', { returnObjects: true }) as string[];
     const stepInterval = setInterval(() => {
       setCurrentStep((prev) => {
         if (prev >= steps.length - 1) {
-          clearInterval(stepInterval)
-          return prev
+          clearInterval(stepInterval);
+          return prev;
         }
-        return prev + 1
-      })
-    }, 500)
+        return prev + 1;
+      });
+    }, 2000);
 
     try {
-      const answer = await generateAstrologyAnswer(birthDetails, questionText, language)
+      const answer = await generateAstrologyAnswer(birthDetails, questionText, i18n.language as Language);
 
       const newQuestion: Question = {
         id: crypto.randomUUID(),
         question: questionText,
         answer,
-        language,
+        language: i18n.language as Language,
         created_at: new Date().toISOString(),
-      }
+      };
 
-      setQuestions([newQuestion, ...questions])
+      setQuestions([newQuestion, ...questions]);
     } catch (err) {
-      console.error('Error getting answer:', err)
-      const errorMsg = language === 'hindi'
-        ? 'उत्तर प्राप्त करने में त्रुटि। कृपया पुनः प्रयास करें।'
-        : language === 'english'
-        ? 'Error getting answer. Please try again.'
-        : 'Answer lene mein error. Please dubara try karein.'
-      setError(errorMsg)
+      console.error('Error getting answer:', err);
+      setError(t('error.fetchAnswer'));
     } finally {
-      clearInterval(stepInterval)
-      setIsSubmittingQuestion(false)
+      clearInterval(stepInterval);
+      setIsSubmittingQuestion(false);
     }
-  }
-
-  const handleLanguageChange = (lang: Language) => {
-    setLanguage(lang)
-  }
+  };
 
   const handleReset = () => {
-    setBirthDetails(null)
-    setQuestions([])
-    setError(null)
-  }
+    setBirthDetails(null);
+    setQuestions([]);
+    setError(null);
+  };
+
+  useEffect(() => {
+    let factInterval: number;
+    if (isSubmittingQuestion) {
+      const facts = t('astrologicalFacts', { returnObjects: true }) as string[];
+      setRandomFact(facts[Math.floor(Math.random() * facts.length)]);
+      factInterval = window.setInterval(() => {
+        setRandomFact(facts[Math.floor(Math.random() * facts.length)]);
+      }, 5000);
+    }
+    return () => window.clearInterval(factInterval);
+  }, [isSubmittingQuestion, t]);
 
   if (!birthDetails) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 py-8">
         <div className="w-full max-w-2xl">
-          <BirthDetailsForm
-            onSubmit={handleBirthDetailsSubmit}
-            language={language}
-            onLanguageChange={handleLanguageChange}
-          />
+          <BirthDetailsForm onSubmit={handleBirthDetailsSubmit} />
         </div>
       </div>
-    )
+    );
   }
 
-  const translations = {
-    hindi: {
-      welcome: 'नमस्ते',
-      askQuestion: 'अपना सवाल पूछें',
-      previousQuestions: 'पिछले उत्तर',
-      newSession: 'नया सत्र',
-      birthInfo: 'जन्म विवरण',
-    },
-    english: {
-      welcome: 'Hello',
-      askQuestion: 'Ask Your Question',
-      previousQuestions: 'Previous Answers',
-      newSession: 'New Session',
-      birthInfo: 'Birth Details',
-    },
-    hinglish: {
-      welcome: 'Namaste',
-      askQuestion: 'Apna Sawal Poochein',
-      previousQuestions: 'Pichle Answers',
-      newSession: 'Naya Session',
-      birthInfo: 'Birth Details',
-    },
-  }
-
-  const t = translations[language]
-  const steps = loadingSteps[language]
+  const steps = t('loadingSteps', { returnObjects: true }) as string[];
 
   return (
     <div className="min-h-screen p-4 md:p-6 lg:p-8 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header with birth details summary */}
         <div className="card card-glass animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <p className="text-celestial-dark text-xl">
-                {t.welcome}, <span className="font-bold">{birthDetails.name}</span>
+                {t('app.welcome')}, <span className="font-bold">{birthDetails.name}</span>
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <select
-                value={language}
-                onChange={(e) => handleLanguageChange(e.target.value as Language)}
+                value={i18n.language}
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
                 className="min-w-[140px]"
               >
-                <option value="hindi">&#2361;&#2367;&#2306;&#2342;&#2368;</option>
-                <option value="english">English</option>
-                <option value="hinglish">Hinglish</option>
+                <option value="hi">&#2361;&#2367;&#2306;&#2342;&#2368;</option>
+                <option value="en">English</option>
               </select>
               <button onClick={handleReset} className="btn-secondary">
-                {t.newSession}
+                {t('app.newSession')}
               </button>
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="summary-box">
-              <div className="summary-box-label">{t.birthInfo}</div>
+              <div className="summary-box-label">{t('app.birthInfo')}</div>
               <div className="summary-box-value">{birthDetails.name}</div>
             </div>
             <div className="summary-box">
@@ -193,7 +136,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Loading overlay */}
         {isSubmittingQuestion && (
           <div className="card animate-fade-in border border-celestial-main/30">
             <div className="text-center mb-6">
@@ -231,10 +173,15 @@ export default function App() {
                 </div>
               ))}
             </div>
+
+            {randomFact && (
+              <div className="mt-6 pt-5 border-t border-zinc-800/50 text-center">
+                <p className="text-sm text-zinc-500 italic">{randomFact}</p>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Error display */}
         {error && (
           <div className="card animate-fade-in border border-red-500/30 bg-red-500/10">
             <p className="text-red-600 text-center">{error}</p>
@@ -243,18 +190,18 @@ export default function App() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <h2 className="mb-6 text-celestial-dark">{t.askQuestion}</h2>
+            <h2 className="mb-6 text-celestial-dark">{t('app.askQuestion')}</h2>
             <QuestionInput
               onSubmit={handleQuestionSubmit}
               isLoading={isSubmittingQuestion}
-              language={language}
+              birthDetails={birthDetails}
             />
           </div>
 
           <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {questions.length > 0 && (
               <>
-                <h2 className="mb-6 text-celestial-dark">{t.previousQuestions}</h2>
+                <h2 className="mb-6 text-celestial-dark">{t('app.previousQuestions')}</h2>
                 <div className="space-y-4">
                   {questions.map((q) => (
                     <AnswerDisplay key={q.id} question={q} />
@@ -266,5 +213,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }
