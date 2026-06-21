@@ -221,7 +221,7 @@ export default function App() {
                       ? 'border-2 border-celestial-main animate-pulse'
                       : 'border-2 border-gray-300'
                   }`}>
-                    {index < currentStep && '&#10003;'}
+                    {index < currentStep && <div dangerouslySetInnerHTML={{ __html: '&#10003;' }} />}
                   </div>
                   <span className={`text-sm ${
                     index === currentStep ? 'text-celestial-dark font-semibold' : 'text-muted'

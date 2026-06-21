@@ -151,6 +151,15 @@ label {
   }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Form elements */
 input,
 textarea,
@@ -289,3 +298,6 @@ select option {
   color: var(--text-muted);
 }
 
+.border-3 {
+  border-width: 3px;
+}
